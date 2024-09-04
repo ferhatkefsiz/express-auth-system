@@ -23,6 +23,5 @@ next-env.d.ts
 .idea
 .vscode
 
-
 # database
 database.log
