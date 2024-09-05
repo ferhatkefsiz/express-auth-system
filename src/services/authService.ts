@@ -15,10 +15,14 @@ export const register = async (data: RegisterDTO): Promise<User> => {
     return Promise.reject(new Error("User already exists"))
   }
 
+  const verificationToken = Math.floor(100000 + Math.random() * 900000).toString()
+
   const newUser = new UserModel({
     email: data.email,
     password: hashedPassword,
     name: data.name,
+    verificationToken,
+    verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
     role: "user"
   })
 
