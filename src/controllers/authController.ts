@@ -31,6 +31,31 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
+export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { verificationCode }: { verificationCode: string } = req.body
+
+    if (!verificationCode) {
+      throw new Error("Missing verification code")
+    }
+
+    const user = await AuthService.verifyEmail(verificationCode)
+
+    res.status(200).json({
+      success: true,
+      message: "Email verified successfully",
+      user
+    })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
+
+    res.status(400).json({
+      message: "Email verification failed",
+      error: errorMessage
+    })
+  }
+}
+
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password }: { email: string; password: string } = req.body
@@ -61,4 +86,13 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       error: errorMessage
     })
   }
+}
+
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  res.clearCookie("authToken")
+
+  res.status(200).json({
+    success: true,
+    message: "Logged out successfully"
+  })
 }

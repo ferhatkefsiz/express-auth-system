@@ -1,6 +1,7 @@
 import bcryptjs from "bcryptjs"
 import UserModel, { User } from "../models/user.model"
 import { RegisterDTO } from "../dtos/auth.dto"
+import { sendVerificationEmail, sendWelcomeOnboardEmail } from "../utils/email"
 
 export const userAlreadyExists = async (email: string): Promise<boolean> => {
   const user = await UserModel.findOne({ email })
@@ -28,7 +29,30 @@ export const register = async (data: RegisterDTO): Promise<User> => {
 
   await newUser.save()
 
+  await sendVerificationEmail({
+    name: data.name,
+    email: data.email,
+    verificationCode: verificationToken
+  })
+
   return newUser.toObject()
+}
+
+export const verifyEmail = async (verificationCode: string): Promise<User> => {
+  const user = await UserModel.findOne({ verificationToken: verificationCode })
+
+  if (!user) {
+    return Promise.reject(new Error("Invalid verification code"))
+  }
+
+  user.isVerified = true
+  user.verificationToken = undefined
+  user.verificationTokenExpiresAt = undefined
+
+  await user.save()
+  await sendWelcomeOnboardEmail({ email: user.email, name: user.name })
+
+  return user.toObject()
 }
 
 export const login = async (email: string, password: string): Promise<User> => {
@@ -44,11 +68,8 @@ export const login = async (email: string, password: string): Promise<User> => {
     return Promise.reject(new Error("Invalid credentials"))
   }
 
-  // Optionally, you can check if the user is verified if you're using email verification
-  /*  if (!user.isVerified) {
-    return Promise.reject(new Error("Account not verified"))
-  }
-  */
+  user.lastLogin = new Date()
+  await user.save()
 
   return user.toObject()
 }
