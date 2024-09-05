@@ -1,5 +1,5 @@
 import bcryptjs from "bcryptjs"
-import UserModel from "../models/user.model"
+import UserModel, { User } from "../models/user.model"
 import { RegisterDTO } from "../dtos/auth.dto"
 
 export const userAlreadyExists = async (email: string): Promise<boolean> => {
@@ -7,7 +7,7 @@ export const userAlreadyExists = async (email: string): Promise<boolean> => {
   return !!user
 }
 
-export const register = async (data: RegisterDTO): Promise<RegisterDTO> => {
+export const register = async (data: RegisterDTO): Promise<User> => {
   const hashedPassword = await bcryptjs.hash(data.password, 10)
   const exists = await userAlreadyExists(data.email)
 
