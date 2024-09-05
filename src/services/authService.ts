@@ -30,3 +30,25 @@ export const register = async (data: RegisterDTO): Promise<User> => {
 
   return newUser.toObject()
 }
+
+export const login = async (email: string, password: string): Promise<User> => {
+  const user = await UserModel.findOne({ email })
+
+  if (!user) {
+    return Promise.reject(new Error("User not found"))
+  }
+
+  const isPasswordValid = await bcryptjs.compare(password, user.password)
+
+  if (!isPasswordValid) {
+    return Promise.reject(new Error("Invalid credentials"))
+  }
+
+  // Optionally, you can check if the user is verified if you're using email verification
+  /*  if (!user.isVerified) {
+    return Promise.reject(new Error("Account not verified"))
+  }
+  */
+
+  return user.toObject()
+}

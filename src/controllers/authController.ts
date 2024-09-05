@@ -30,3 +30,35 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     })
   }
 }
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password }: { email: string; password: string } = req.body
+
+    if (!email || !password) {
+      throw new Error("Missing email or password")
+    }
+
+    const user = await AuthService.login(email, password)
+
+    if (!user) {
+      throw new Error("Invalid credentials")
+    }
+
+    const token = generateToken({ id: user._id, email: user.name })
+    setTokenCookie(res, token)
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user: user
+    })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
+
+    res.status(400).json({
+      message: "Login failed",
+      error: errorMessage
+    })
+  }
+}
