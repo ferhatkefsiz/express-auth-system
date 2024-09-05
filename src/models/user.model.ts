@@ -6,8 +6,8 @@ export interface User extends Document {
   password: string
   name: string
   lastLogin: Date
-  verificationToken: string
-  verificationTokenExpiresAt: Date
+  verificationToken: string | undefined
+  verificationTokenExpiresAt: Date | undefined
   isVerified: boolean
   role: "user" | "admin"
   comparePassword(password: string): Promise<boolean>
