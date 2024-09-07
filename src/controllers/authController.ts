@@ -2,6 +2,7 @@ import { Request, Response } from "express"
 import { RegisterDTO } from "../dtos/auth.dto"
 import * as AuthService from "../services/authService"
 import { generateToken, setTokenCookie } from "../utils/authToken"
+import { handleError } from "../utils/errorHandler"
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -22,12 +23,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       user: user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-
-    res.status(400).json({
-      message: "User registration failed",
-      error: errorMessage
-    })
+    handleError(res, error, 400, "User registration failed")
   }
 }
 
@@ -47,12 +43,7 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
       user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-
-    res.status(400).json({
-      message: "Email verification failed",
-      error: errorMessage
-    })
+    handleError(res, error, 400, "Email verification failed")
   }
 }
 
@@ -79,12 +70,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       user: user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-
-    res.status(400).json({
-      message: "Login failed",
-      error: errorMessage
-    })
+    handleError(res, error, 400, "Login failed")
   }
 }
 
@@ -108,11 +94,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
       user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-
-    res.status(400).json({
-      error: errorMessage
-    })
+    handleError(res, error)
   }
 }
 
@@ -129,10 +111,6 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
       user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-
-    res.status(400).json({
-      error: errorMessage
-    })
+    handleError(res, error)
   }
 }

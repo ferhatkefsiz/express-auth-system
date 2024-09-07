@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import UserModel from "../models/user.model"
 import bcryptjs from "bcryptjs"
+import { handleError } from "../utils/errorHandler"
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -35,11 +36,7 @@ export const getUser = async (req: Request, res: Response) => {
       user
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-    res.status(500).json({
-      message: "Failed to retrieve user",
-      error: errorMessage
-    })
+    handleError(res, error, 500, "Failed to retrieve user")
   }
 }
 
@@ -79,11 +76,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
       }
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-    res.status(500).json({
-      message: "Error updating user",
-      error: errorMessage
-    })
+    handleError(res, error, 500, "Error updating user")
   }
 }
 
@@ -109,10 +102,6 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
       }
     })
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
-    res.status(500).json({
-      message: "Error deleting user",
-      error: errorMessage
-    })
+    handleError(res, error, 500, "Error deleting user")
   }
 }

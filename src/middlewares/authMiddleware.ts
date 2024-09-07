@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
+import { handleError } from "../utils/errorHandler"
 
 interface DecodedToken {
   id: string
@@ -23,6 +24,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
       throw new Error("Invalid token structure")
     }
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized: Invalid token" })
+    handleError(res, error, 401, "Unauthorized: Invalid token")
   }
 }
