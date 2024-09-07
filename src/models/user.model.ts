@@ -6,6 +6,8 @@ export interface User extends Document {
   password: string
   name: string
   lastLogin: Date
+  resetPasswordToken: string | undefined
+  resetPasswordTokenExpiresAt: Date | undefined
   verificationToken: string | undefined
   verificationTokenExpiresAt: Date | undefined
   isVerified: boolean
@@ -21,6 +23,8 @@ const userSchema = new Schema<User>(
     name: { type: String, required: true },
     isVerified: { type: Boolean, default: false },
     role: { type: String, enum: ["user", "admin"], default: "user" },
+    resetPasswordToken: String,
+    resetPasswordTokenExpiresAt: Date,
     verificationToken: String,
     verificationTokenExpiresAt: Date
   },

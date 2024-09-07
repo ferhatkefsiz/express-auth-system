@@ -96,3 +96,43 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
     message: "Logged out successfully"
   })
 }
+
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  const { email } = req.body
+  try {
+    const user = await AuthService.forgotPassword(email)
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset link sent to your email",
+      user
+    })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
+
+    res.status(400).json({
+      error: errorMessage
+    })
+  }
+}
+
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { token } = req.params
+    const { password } = req.body
+
+    const user = await AuthService.resetPassword(token, password)
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+      user
+    })
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred"
+
+    res.status(400).json({
+      error: errorMessage
+    })
+  }
+}

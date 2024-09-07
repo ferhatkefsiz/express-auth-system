@@ -46,3 +46,37 @@ export const sendWelcomeOnboardEmail = async ({ email, name }: { email: string; 
     throw new Error(`Email could not be sent ${error}`)
   }
 }
+
+export const sendPasswordResetEmail = async ({ email, resetURL }: { email: string; resetURL: string }) => {
+  try {
+    const res = await resend.emails.send({
+      from: `"Onboarding" <${process.env.EMAIL_SENDER}>`,
+      // for production, you should use the email address of the user  who is registering instead of the hardcoded email address
+      // to: [email],
+      to: [process.env.EMAIL_RECIPIENT || "recipient_email"],
+      subject: "Password Reset",
+      html: `Hello, <br><br> Click <a href="${resetURL}">here</a> to reset your password`
+    })
+
+    console.log("Email sent successfully", res)
+  } catch (error) {
+    throw new Error(`Email could not be sent ${error}`)
+  }
+}
+
+export const sendResetSuccessEmail = async ({ email }: { email: string }) => {
+  try {
+    const res = await resend.emails.send({
+      from: `"Onboarding" <${process.env.EMAIL_SENDER}>`,
+      // for production, you should use the email address of the user  who is registering instead of the hardcoded email address
+      // to: [email],
+      to: [process.env.EMAIL_RECIPIENT || "recipient_email"],
+      subject: "Password Reset Success",
+      html: `Hello, <br><br> Your password has been successfully reset!`
+    })
+
+    console.log("Email sent successfully", res)
+  } catch (error) {
+    throw new Error(`Email could not be sent ${error}`)
+  }
+}
