@@ -2,7 +2,6 @@
 
 A robust and scalable authentication system built with Node.js, Express.js, TypeScript, and MongoDB, utilizing JSON Web Tokens (JWT) for secure authentication. This project serves as a foundation for any Node.js application requiring user registration, login, and role-based access control.
 
-
 ## Features
 
 - **User Registration**: Secure user registration with password hashing.
@@ -14,12 +13,19 @@ A robust and scalable authentication system built with Node.js, Express.js, Type
 # API Endpoints
 
 ## Auth
+
 - `POST /auth/register` - Register a new user
 - `POST /auth/login` - Login and obtain a JWT
+- `POST /auth/verify-email` - Verify a user's email address
+- `POST /auth/forgot-password` - Send a password reset email
+- `POST /auth/reset-password` - Reset a user's password
+- `POST /auth/logout` - Logout a user (protected)
 
 ## User
+
+- `GET /users` - Get all users (protected)
 - `GET /users/:id` - Get user details by ID (protected)
-- `GET /users/:id` - Get user details by ID (protected)
+- `PUT /users/:id` - Update user details by ID (protected)
 - `DELETE /users/:id` - Delete a user (protected)
 
 # Installation
@@ -39,6 +45,7 @@ npm install
 ```
 
 # Environment Variables
+
 Create a `.env` file in the root of the project and add the following variables:
 
 ```file
@@ -59,4 +66,5 @@ npm run start:dev
 ```
 
 # Contributing
+
 Contributions are welcome! Please fork this repository and submit a pull request for any enhancements or bug fixes.
