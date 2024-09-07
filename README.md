@@ -55,6 +55,7 @@ MONGODB_URI=
 RESEND_API_KEY=
 EMAIL_SENDER=onboarding@resend.dev
 EMAIL_RECIPIENT=
+CLIENT_URL=
 ```
 
 # Running the Project
